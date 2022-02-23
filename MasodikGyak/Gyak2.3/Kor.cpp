@@ -130,6 +130,8 @@ int main(int argc, char ** argv)
             color.b = circle.b;
             SDL_RenderDrawCircle(renderer,circle.x,circle.y,30,color);
             SDL_RenderFillCircle(renderer,circle.x,circle.y,30,color);
+
+            //Set X sign in to the circle if the mouse on top of the circle
             if(mouseY < circle.y+30 && mouseX < circle.x+30 && mouseX > circle.x-30 && mouseY > circle.y-30){
                 lineX1 = circle.x-5;
                 lineY1 = circle.y+5;
