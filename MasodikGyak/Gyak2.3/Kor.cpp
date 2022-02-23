@@ -7,11 +7,14 @@
 
 const int width = 800;
 const int height = 600;
+const int lower = 0;
+const int upper = 255;
 
 struct Circle{
     int x;
     int y;
-    int radius;
+    int radius = 30;
+    int r,g,b;
 };
 
 int SDL_RenderFillCircle(SDL_Renderer * renderer, int x, int y, int radius,SDL_Color color);
@@ -21,16 +24,18 @@ int setRandomRgb(int lower, int upper);
 
 int main(int argc, char ** argv)
 {
+    //variables
     int mouseX;
     int mouseY;
-    int lower = 0;
-    int upper = 255;
     int MAX_CIRCLE_COUNT;
-    Circle circle;
+    int lineX1,lineX2,lineY1,lineY2;
+
+    Circle newCircle;
     SDL_Color color;
     color.r = 0;
     color.g = 0;
     color.b = 0;
+
     std::vector<Circle> circles;
 
     MAX_CIRCLE_COUNT = setMaxCircleCount();
@@ -43,91 +48,107 @@ int main(int argc, char ** argv)
 
     SDL_Event event;
 
-    int exit = 0;
+    int circleCount = 0;
     bool HaveCircle = true;
-    bool drawing = false;
+    bool drawNewCircle = false;
     bool quit = false;
+    bool RightButtonDown = false;
     while(!quit){
-        SDL_Delay(10);
+        SDL_Delay(1000/60);
         SDL_PollEvent(&event);
 
-        switch(event.type){
-        case SDL_QUIT:
+        if(SDL_QUIT == event.type){
             quit = true;
-            break;
-
         }
 
         SDL_SetRenderDrawColor(renderer,110,110,110,SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
 
+        //Setting the circle x,y coord = with the mouse pos x,y and setting the rgb colors
         switch(event.type){
         case SDL_MOUSEBUTTONDOWN:
-            switch(event.button.button && HaveCircle){
-            case SDL_BUTTON_LEFT:
-                circle.x = event.motion.x;
-                circle.y = event.motion.y;
-                drawing = true;
-                color.r = setRandomRgb(lower,upper);
-                color.g = setRandomRgb(lower,upper);
-                color.b = setRandomRgb(lower,upper);
-            break;
+            if(SDL_BUTTON_LEFT == event.button.button && HaveCircle){
+                newCircle.x = event.motion.x;
+                newCircle.y = event.motion.y;
+                drawNewCircle = true;
+                newCircle.r = setRandomRgb(lower,upper);
+                newCircle.g = setRandomRgb(lower,upper);
+                newCircle.b = setRandomRgb(lower,upper);
             }
         break;
 
+        //if drawing finished count the circle number then set the drawing false
         case SDL_MOUSEBUTTONUP:
-            switch(event.button.button && HaveCircle){
-            case SDL_BUTTON_LEFT:
-                drawing = false;
-                exit++;
+            if(SDL_BUTTON_LEFT == event.button.button && HaveCircle){
+                drawNewCircle = false;
+                circleCount++;
+                circles.push_back(newCircle);
             }
         }
 
+        //checking the mouth x,y pos then move the circle x,y coord towards the mouse x,y pos
         switch(event.type){
-
         case SDL_MOUSEMOTION:
             {
             mouseX = event.motion.x;
             mouseY = event.motion.y;
-            printf("Mouse loc:%d,%d\n",mouseX,mouseY);
+            printf("Mouse:%d, %d\n",mouseX,mouseY);
             }
         break;
 
         case SDL_MOUSEBUTTONDOWN:
         switch(event.button.button){
             case SDL_BUTTON_RIGHT:
-                if(mouseX < circle.x){
-                    printf("Left move!\n");
-                   circle.x--;
+                for(auto & circle : circles){
+                    if(mouseX < circle.x){
+                        printf("Left move!\n");
+                        circle.x-=10;
+                    }else if(mouseX > circle.x){
+                        printf("Right move!\n");
+                        circle.x+=10;
+                    }
+                    if(mouseY > circle.y){
+                        printf("Down move!\n");
+                        circle.y+=10;
 
-                }else if(mouseX > circle.x){
-                   circle.x++;
-                }
-                if(mouseY > circle.y){
-                    circle.y++;
-
-                }else if(mouseY < circle.y){
-                    circle.y--;
-
+                    }else if(mouseY < circle.y){
+                        printf("Top move!\n");
+                        circle.y-=10;
+                    }
                 }
             }
-
         }
 
-        if(exit == MAX_CIRCLE_COUNT){
+        if(circleCount == MAX_CIRCLE_COUNT){
             HaveCircle = false;
         }
 
-        circles.push_back({circle.x,circle.y,circle.radius});
+        //redraw the circles
         for(auto & circle : circles){
+            color.r = circle.r;
+            color.g = circle.g;
+            color.b = circle.b;
             SDL_RenderDrawCircle(renderer,circle.x,circle.y,30,color);
             SDL_RenderFillCircle(renderer,circle.x,circle.y,30,color);
+            if(mouseY < circle.y+30 && mouseX < circle.x+30 && mouseX > circle.x-30 && mouseY > circle.y-30){
+                lineX1 = circle.x-5;
+                lineY1 = circle.y+5;
+                lineX2 = circle.x+5;
+                lineY2 = circle.y-5;
+                SDL_SetRenderDrawColor(renderer,0,0,0,SDL_ALPHA_OPAQUE);
+                SDL_RenderDrawLine(renderer, lineX1, lineY1, lineX2, lineY2);
+                SDL_RenderDrawLine(renderer, lineX1, lineY2, lineX2, lineY1);
+            }
         }
 
-        if(drawing){
-            SDL_RenderDrawCircle(renderer,circle.x,circle.y,30,color);
-            SDL_RenderFillCircle(renderer,circle.x,circle.y,30,color);
-            printf("Circle pos:%d,%d\n",circle.x,circle.y);
+        //draw the circles
+        if(drawNewCircle){
+            color.r = newCircle.r;
+            color.g = newCircle.g;
+            color.b = newCircle.b;
+            SDL_RenderDrawCircle(renderer,newCircle.x,newCircle.y,30,color);
+            SDL_RenderFillCircle(renderer,newCircle.x,newCircle.y,30,color);
+            printf("Circle pos:%d,%d\n",newCircle.x,newCircle.y);
         }
 
         SDL_RenderPresent(renderer);
