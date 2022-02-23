@@ -21,14 +21,16 @@ int setRandomRgb(int lower, int upper);
 
 int main(int argc, char ** argv)
 {
+    int mouseX;
+    int mouseY;
     int lower = 0;
     int upper = 255;
     int MAX_CIRCLE_COUNT;
     Circle circle;
     SDL_Color color;
-    color.r;
-    color.g;
-    color.b;
+    color.r = 0;
+    color.g = 0;
+    color.b = 0;
     std::vector<Circle> circles;
 
     MAX_CIRCLE_COUNT = setMaxCircleCount();
@@ -71,14 +73,43 @@ int main(int argc, char ** argv)
                 color.b = setRandomRgb(lower,upper);
             break;
             }
-            break;
+        break;
 
         case SDL_MOUSEBUTTONUP:
             switch(event.button.button && HaveCircle){
             case SDL_BUTTON_LEFT:
                 drawing = false;
-                circles.push_back({circle.x,circle.y,circle.radius});
                 exit++;
+            }
+        }
+
+        switch(event.type){
+
+        case SDL_MOUSEMOTION:
+            {
+            mouseX = event.motion.x;
+            mouseY = event.motion.y;
+            printf("Mouse loc:%d,%d\n",mouseX,mouseY);
+            }
+        break;
+
+        case SDL_MOUSEBUTTONDOWN:
+        switch(event.button.button){
+            case SDL_BUTTON_RIGHT:
+                if(mouseX < circle.x){
+                    printf("Left move!\n");
+                   circle.x--;
+
+                }else if(mouseX > circle.x){
+                   circle.x++;
+                }
+                if(mouseY > circle.y){
+                    circle.y++;
+
+                }else if(mouseY < circle.y){
+                    circle.y--;
+
+                }
             }
 
         }
@@ -87,7 +118,7 @@ int main(int argc, char ** argv)
             HaveCircle = false;
         }
 
-
+        circles.push_back({circle.x,circle.y,circle.radius});
         for(auto & circle : circles){
             SDL_RenderDrawCircle(renderer,circle.x,circle.y,30,color);
             SDL_RenderFillCircle(renderer,circle.x,circle.y,30,color);

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1645464703 source:d:\egyetem\cprogramming\szgepgrafika\gyak2.3\kor.cpp
+1645640195 source:d:\egyetem\cprogramming\szgepgrafika\gyak2.3\kor.cpp
 	<SDL.h>
 	<stdbool.h>
 	<sstream>
