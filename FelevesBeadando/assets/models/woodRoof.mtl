@@ -1,0 +1,13 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl 10330_Wooden_Cutting_Board_v1.002
+Ns 10.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd C:\\Users\\Gábor\\Downloads\\10330_Wooden_Cutting_Board_v2_L3.123c0586975b-e863-4eee-998e-bc513c3d0b1a\\10330_Wooden Cutting Board_v1_diffuse.JPG
