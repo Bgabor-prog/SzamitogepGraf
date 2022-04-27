@@ -19,10 +19,6 @@ void CreateCamera(Camera* camera)
     camera->speed.x = 0.0;
     camera->speed.y = 0.0;
     camera->speed.z = 0.0;
-
-
-    camera->canMoveUp = false;
-    camera->canMoveDown = false;
 }
 
 //Update camera movements in real time
@@ -52,7 +48,7 @@ void UpdateCamera(Camera* camera, double time)
     }
 
     if(camera->pos.x < -6.5 || camera->pos.x > 6.5 || camera->pos.y < -6.5 || camera->pos.y > 6.5){
-        printf("edge");
+
         CreateCamera(camera);
     }
 }

@@ -3,10 +3,7 @@
 #include <stdio.h>
 #include "scene.h"
 
-GLfloat ambient_light[] = { 0.5f, 0.5f, 0.5f, 0.0f };
-GLfloat diffuse_light[] = { 0.5f, 0.5f, 0.0, 0.0f };
-GLfloat specular_light[] = { 0.5f, 0.5f, 0.5f, 0.2f };
-GLfloat position[] = { 0.0f, 0.0f, 3.0f, 1.0f };
+bool UpdateTheScene = false;
 
 void init_Program(Program* Program, int width, int height)
 {
@@ -71,12 +68,6 @@ void init_opengl()
     glDisable(GL_LIGHTING);
     glColor3f(1.0, 1.0, 0.0);
 
-
-    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient_light);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_light);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, specular_light);
-    glLightfv(GL_LIGHT0, GL_POSITION, position);
-
     glEnable(GL_LIGHTING);
     glPopMatrix();
     glEnable(GL_LIGHT0);
@@ -104,7 +95,7 @@ void reshape(GLsizei width, GLsizei height)
     glViewport(x, y, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-.08, .08,-.06, .06,.1, 10);
+    glFrustum(-.08, .08,-.06, .06,.1, 20);
 }
 
 void HandlingProgramEvents(Program* Program)
@@ -142,12 +133,20 @@ void HandlingProgramEvents(Program* Program)
                 SetCameraLiftSpeed(&(Program->camera), -2);
                 break;
             case SDL_SCANCODE_KP_PLUS:
-                ambient_light[0] = ambient_light[1] = ambient_light[2] += 0.1;
-                printf("+ lenyomva");
+				if(Program->scene.light<1.0){
+					Program->scene.light+=0.02;
+				}
                 break;
             case SDL_SCANCODE_KP_MINUS:
-                ambient_light[0] = ambient_light[1] = ambient_light[2] -= 0.01;
-                printf("- lenyomva");
+                if(Program->scene.light>0.0){
+					Program->scene.light-=0.02;
+				}
+				break;
+			case SDL_SCANCODE_F1:
+				show_panel(&(Program->scene.helppanel_show));
+                break;
+            case SDL_SCANCODE_R:
+				UpdateTheScene = true;
                 break;
             default:
                 break;
@@ -194,6 +193,13 @@ void HandlingProgramEvents(Program* Program)
     }
 }
 
+void show_panel(bool* helppanel_show){
+	if(*helppanel_show==false){
+		*helppanel_show=true;
+	}else{
+		*helppanel_show=false;
+	}
+}
 
 void UpdateProgram(Program* Program)
 {
@@ -205,7 +211,9 @@ void UpdateProgram(Program* Program)
     Program->uptime = current_time;
 
     UpdateCamera(&(Program->camera), elapsed_time);
-    UpdateScene(&(Program->scene));
+    if(UpdateTheScene){
+        UpdateScene(&(Program->scene));
+    }
 }
 
 void RenderProgram(Program* Program)
@@ -217,8 +225,33 @@ void RenderProgram(Program* Program)
     SetView(&(Program->camera));
     RenderScene(&(Program->scene));
     glPopMatrix();
-
+	if(Program->scene.helppanel_show==true){
+		render_helppanel(Program->scene.helppanel);
+	}
     SDL_GL_SwapWindow(Program->window);
+}
+
+
+void render_helppanel(GLuint texture){
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0.0, 1280, 800, 0.0, -1.0, 10.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glDisable(GL_CULL_FACE);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glBindTexture(GL_TEXTURE_2D,texture);
+	glColor3f(1.0,1.0,1.0);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0,1.0);	glVertex2f(0.0,800);
+	glTexCoord2f(1.0,1.0);	glVertex2f(1280,800);
+	glTexCoord2f(1.0,0.0);	glVertex2f(1280.0,0.0);
+	glTexCoord2f(0.0,0.0);	glVertex2f(0.0,0.0);
+	glEnd();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
 }
 
 void ExitFromProgram(Program* Program)

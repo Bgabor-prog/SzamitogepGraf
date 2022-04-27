@@ -30,8 +30,14 @@ void HandlingProgramEvents(Program* Program);
 
 void UpdateProgram(Program* Program);
 
+void PressedUpdate(Program* Program);
+
 void RenderProgram(Program* Program);
 
 void ExitFromProgram(Program* Program);
+
+void render_helppanel(GLuint texture);
+
+void show_panel(bool* helppanel_show);
 
 #endif // PROGRAM_H

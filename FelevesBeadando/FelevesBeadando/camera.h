@@ -10,8 +10,6 @@ typedef struct Camera
     vec3 pos;
     vec3 rotation;
     vec3 speed;
-    bool canMoveUp;
-    bool canMoveDown;
 } Camera;
 
 
