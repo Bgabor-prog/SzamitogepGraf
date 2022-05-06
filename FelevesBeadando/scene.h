@@ -33,15 +33,29 @@ typedef struct Scene
     GLuint blackKing_texture_id;
     GLuint blackKnight_texture_id;
 
+    GLuint blackRook_second_texture_id;
+    GLuint blackPawn_second_texture_id;
+    GLuint blackKing_second_texture_id;
+    GLuint blackKnight_second_texture_id;
+
     GLuint whitePawn_texture_id;
     GLuint whiteQueen_texture_id;
     GLuint whiteRook_texture_id;
 
+    GLuint whitePawn_second_texture_id;
+    GLuint whiteQueen_second_texture_id;
+    GLuint whiteRook_second_texture_id;
+
     float ambient_light[4];
+    float redTone;
+    float greenTone;
+    float blueTone;
+    float light;
+
     float diffuse_light[4];
     float specular_light[4];
     float position[4];
-	float light;
+
 	bool helppanel_show;
 	GLuint helppanel;
 
@@ -69,8 +83,8 @@ void CreateScene(Scene* scene);
 
 void SetMaterial(const Material* material);
 
-void UpdateScene(Scene* scene);
+void UpdateScene(Scene* scene, double time);
 
-void RenderScene(Scene* scene);
+void RenderScene(Scene* scene,int texture);
 
 #endif // SCENE_H_INCLUDED

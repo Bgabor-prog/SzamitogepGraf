@@ -4,6 +4,7 @@
 #include "scene.h"
 
 bool UpdateTheScene = false;
+bool ChangeTexture = false;
 
 void init_Program(Program* Program, int width, int height)
 {
@@ -133,12 +134,18 @@ void HandlingProgramEvents(Program* Program)
                 SetCameraLiftSpeed(&(Program->camera), -2);
                 break;
             case SDL_SCANCODE_KP_PLUS:
-				if(Program->scene.light<1.0){
+				if(Program->scene.redTone < 1.0 && Program->scene.greenTone < 1.0 && Program->scene.blueTone < 1.0){
+					Program->scene.redTone+=0.02;
+					Program->scene.greenTone+=0.02;
+					Program->scene.blueTone+=0.02;
 					Program->scene.light+=0.02;
 				}
                 break;
             case SDL_SCANCODE_KP_MINUS:
-                if(Program->scene.light>0.0){
+                if(Program->scene.redTone > 0.0 && Program->scene.greenTone > 0.0 && Program->scene.blueTone > 0.0){
+					Program->scene.redTone-=0.02;
+					Program->scene.greenTone-=0.02;
+					Program->scene.blueTone-=0.02;
 					Program->scene.light-=0.02;
 				}
 				break;
@@ -147,6 +154,16 @@ void HandlingProgramEvents(Program* Program)
                 break;
             case SDL_SCANCODE_R:
 				UpdateTheScene = true;
+                break;
+            case SDL_SCANCODE_1:
+				if(ChangeTexture){
+                    ChangeTexture = false;
+				}
+                break;
+            case SDL_SCANCODE_2:
+				if(!ChangeTexture){
+                    ChangeTexture = true;
+				}
                 break;
             default:
                 break;
@@ -211,9 +228,11 @@ void UpdateProgram(Program* Program)
     Program->uptime = current_time;
 
     UpdateCamera(&(Program->camera), elapsed_time);
+
     if(UpdateTheScene){
-        UpdateScene(&(Program->scene));
+        UpdateScene(&(Program->scene), elapsed_time);
     }
+
 }
 
 void RenderProgram(Program* Program)
@@ -223,7 +242,13 @@ void RenderProgram(Program* Program)
 
     glPushMatrix();
     SetView(&(Program->camera));
-    RenderScene(&(Program->scene));
+
+    if(ChangeTexture){
+        RenderScene(&(Program->scene), 1);
+    }else if(!ChangeTexture){
+        RenderScene(&(Program->scene), 2);
+    }
+
     glPopMatrix();
 	if(Program->scene.helppanel_show==true){
 		render_helppanel(Program->scene.helppanel);
