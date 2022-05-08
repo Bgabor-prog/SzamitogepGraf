@@ -14,13 +14,19 @@ void CreateScene(Scene* scene)
     load_model(&(scene->roof), "assets/models/woodRoof.obj");
     scene->roof_texture_id = load_texture("assets/textures/woodRoof.jpg");
 
-    load_model(&(scene->blackRook), "assets/models/rook.obj");
+    load_model(&(scene->Rook), "assets/models/rook.obj");
     scene->blackRook_texture_id = load_texture("assets/textures/blackRook.jpg");
     scene->blackRook_second_texture_id = load_texture("assets/textures/woodRook.jpg");
 
-    load_model(&(scene->blackPawn), "assets/models/Pawn.obj");
+    scene->whiteRook_texture_id = load_texture("assets/textures/whiteRook.jpg");
+    scene->whiteRook_second_texture_id = load_texture("assets/textures/darkwoodRook.jpg");
+
+    load_model(&(scene->Pawn), "assets/models/Pawn.obj");
     scene->blackPawn_texture_id = load_texture("assets/textures/blackPawn.jpg");
     scene->blackPawn_second_texture_id = load_texture("assets/textures/woodPawn.jpg");
+
+    scene->whitePawn_texture_id = load_texture("assets/textures/whitePawn.jpg");
+    scene->whitePawn_second_texture_id = load_texture("assets/textures/darkwoodPawn.jpg");
 
     load_model(&(scene->blackKing), "assets/models/blackKing.obj");
     scene->blackKing_texture_id = load_texture("assets/textures/blackKing.jpg");
@@ -30,17 +36,9 @@ void CreateScene(Scene* scene)
     scene->blackKnight_texture_id = load_texture("assets/textures/blackKnight.jpg");
     scene->blackKnight_second_texture_id = load_texture("assets/textures/woodKnight.jpg");
 
-    load_model(&(scene->whitePawn), "assets/models/Pawn.obj");
-    scene->whitePawn_texture_id = load_texture("assets/textures/whitePawn.jpg");
-    scene->whitePawn_second_texture_id = load_texture("assets/textures/darkwoodPawn.jpg");
-
     load_model(&(scene->whiteQueen), "assets/models/whiteQueen.obj");
     scene->whiteQueen_texture_id = load_texture("assets/textures/whiteQueen.jpg");
     scene->whiteQueen_second_texture_id = load_texture("assets/textures/darkwoodQueen.jpg");
-
-    load_model(&(scene->whiteRook), "assets/models/rook.obj");
-    scene->whiteRook_texture_id = load_texture("assets/textures/whiteRook.jpg");
-    scene->whiteRook_second_texture_id = load_texture("assets/textures/darkwoodRook.jpg");
 
     scene->material.ambient.red = 0.8;
     scene->material.ambient.green = 0.8;
@@ -300,14 +298,14 @@ void RenderScene(Scene* scene,int texture)
         glBindTexture(GL_TEXTURE_2D, scene->blackRook_second_texture_id);
         glTranslatef(scene->blackRook_pos.x, scene->blackRook_pos.y, scene->blackRook_pos.z);
         glRotatef(scene->RookAngle, scene->blackRook_angle.x, scene->blackRook_angle.y, scene->blackRook_angle.z);
-        draw_model(&(scene->blackRook));
+        draw_model(&(scene->Rook));
         glPopMatrix();
 	}else if(texture == 2){
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, scene->blackRook_texture_id);
         glTranslatef(scene->blackRook_pos.x, scene->blackRook_pos.y, scene->blackRook_pos.z);
         glRotatef(scene->RookAngle, scene->blackRook_angle.x, scene->blackRook_angle.y, scene->blackRook_angle.z);
-        draw_model(&(scene->blackRook));
+        draw_model(&(scene->Rook));
         glPopMatrix();
 	}
 
@@ -315,13 +313,13 @@ void RenderScene(Scene* scene,int texture)
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, scene->blackPawn_second_texture_id);
         glTranslatef(scene->blackPawn_pos.x, scene->blackPawn_pos.y, scene->blackPawn_pos.z);
-        draw_model(&(scene->blackPawn));
+        draw_model(&(scene->Pawn));
         glPopMatrix();
     }else if(texture == 2){
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, scene->blackPawn_texture_id);
         glTranslatef(scene->blackPawn_pos.x, scene->blackPawn_pos.y, scene->blackPawn_pos.z);
-        draw_model(&(scene->blackPawn));
+        draw_model(&(scene->Pawn));
         glPopMatrix();
     }
     if(texture == 1){
@@ -361,27 +359,27 @@ void RenderScene(Scene* scene,int texture)
         glBindTexture(GL_TEXTURE_2D, scene->whitePawn_second_texture_id);
         glTranslatef(scene->whitePawn_pos.x,  scene->whitePawn_pos.y,  scene->whitePawn_pos.z);
         glRotatef(scene->PawnAngle, scene->whitePawn_angle.x, scene->whitePawn_angle.y, scene->whitePawn_angle.z);
-        draw_model(&(scene->whitePawn));
+        draw_model(&(scene->Pawn));
         glPopMatrix();
     }else if(texture == 2){
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, scene->whitePawn_texture_id);
         glTranslatef(scene->whitePawn_pos.x,  scene->whitePawn_pos.y,  scene->whitePawn_pos.z);
         glRotatef(scene->PawnAngle, scene->whitePawn_angle.x, scene->whitePawn_angle.y, scene->whitePawn_angle.z);
-        draw_model(&(scene->whitePawn));
+        draw_model(&(scene->Pawn));
         glPopMatrix();
     }
     if(texture == 1){
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, scene->whitePawn_second_texture_id);
         glTranslatef(-2.4, -3.9, -0.1);
-        draw_model(&(scene->whitePawn));
+        draw_model(&(scene->Pawn));
         glPopMatrix();
     }else if(texture == 2){
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, scene->whitePawn_texture_id);
         glTranslatef(-2.4, -3.9, -0.1);
-        draw_model(&(scene->whitePawn));
+        draw_model(&(scene->Pawn));
         glPopMatrix();
     }
 
@@ -389,13 +387,13 @@ void RenderScene(Scene* scene,int texture)
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, scene->whitePawn_second_texture_id);
         glTranslatef(0.8, -3.9, -0.1);
-        draw_model(&(scene->whitePawn));
+        draw_model(&(scene->Pawn));
         glPopMatrix();
     }else if(texture == 2){
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, scene->whitePawn_texture_id);
         glTranslatef(0.8, -3.9, -0.1);
-        draw_model(&(scene->whitePawn));
+        draw_model(&(scene->Pawn));
         glPopMatrix();
     }
 
@@ -403,13 +401,13 @@ void RenderScene(Scene* scene,int texture)
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, scene->whitePawn_second_texture_id);
         glTranslatef(2.3, -2.2, -0.1);
-        draw_model(&(scene->whitePawn));
+        draw_model(&(scene->Pawn));
         glPopMatrix();
     }else if(texture == 2){
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, scene->whitePawn_texture_id);
         glTranslatef(2.3, -2.2, -0.1);
-        draw_model(&(scene->whitePawn));
+        draw_model(&(scene->Pawn));
         glPopMatrix();
     }
 
@@ -431,13 +429,13 @@ void RenderScene(Scene* scene,int texture)
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, scene->whiteRook_second_texture_id);
         glTranslatef(scene->whiteRook_pos.x,scene->whiteRook_pos.y, scene->whiteRook_pos.z);
-        draw_model(&(scene->whiteRook));
+        draw_model(&(scene->Rook));
         glPopMatrix();
     }else if(texture == 2){
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, scene->whiteRook_texture_id);
         glTranslatef(scene->whiteRook_pos.x,scene->whiteRook_pos.y, scene->whiteRook_pos.z);
-        draw_model(&(scene->whiteRook));
+        draw_model(&(scene->Rook));
         glPopMatrix();
     }
 }

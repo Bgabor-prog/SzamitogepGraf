@@ -12,17 +12,13 @@ typedef struct Scene
     Model walls;
     Model roof;
 
-    Model blackRook;
+    Model Rook;
+    Model Pawn;
+
     Model blackKing;
-    Model blackPawn;
     Model blackKnight;
 
-    Model whitePawn;
     Model whiteQueen;
-    Model whiteRook;
-
-    Material material;
-	Material chess_material;
 
     GLuint floor_texture_id;
     GLuint walls_texture_id;
@@ -32,7 +28,6 @@ typedef struct Scene
     GLuint blackPawn_texture_id;
     GLuint blackKing_texture_id;
     GLuint blackKnight_texture_id;
-
     GLuint blackRook_second_texture_id;
     GLuint blackPawn_second_texture_id;
     GLuint blackKing_second_texture_id;
@@ -41,41 +36,45 @@ typedef struct Scene
     GLuint whitePawn_texture_id;
     GLuint whiteQueen_texture_id;
     GLuint whiteRook_texture_id;
-
     GLuint whitePawn_second_texture_id;
     GLuint whiteQueen_second_texture_id;
     GLuint whiteRook_second_texture_id;
 
+    //light prop.
     float ambient_light[4];
+    float diffuse_light[4];
+    float specular_light[4];
+    float position[4];
+
     float redTone;
     float greenTone;
     float blueTone;
     float light;
 
-    float diffuse_light[4];
-    float specular_light[4];
-    float position[4];
+    Material material;
+    Material chess_material;
 
-	bool helppanel_show;
-	GLuint helppanel;
-
+    //black prop.
 	vec3 blackKnight_pos;
 	vec3 blackPawn_pos;
 	vec3 blackRook_pos;
-
-
 	vec3 blackKnight_angle;
-	float KnightAngle;
+    vec3 blackRook_angle;
 
-	vec3 blackRook_angle;
+	float KnightAngle;
 	float RookAngle;
 
+    //white prop.
 	vec3 whiteRook_pos;
     vec3 whiteQueen_pos;
-
 	vec3 whitePawn_pos;
 	vec3 whitePawn_angle;
+
 	float PawnAngle;
+
+    //helppanel prop.
+    bool helppanel_show;
+    GLuint helppanel;
 
 } Scene;
 
